@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { JsonLd } from '@/components/JsonLd';
 import { SiteFooter } from '@/components/SiteFooter';
 import { SiteHeader } from '@/components/SiteHeader';
+import { TrackingNoScript, TrackingScripts } from '@/components/TrackingScripts';
 import { SITE } from '@/lib/site';
 import './globals.css';
 
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-US" className={inter.variable}>
       <body className="flex min-h-dvh flex-col font-sans">
+        <TrackingNoScript />
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:shadow">
           Skip to content
         </a>
@@ -63,6 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url },
           ]}
         />
+        <TrackingScripts />
       </body>
     </html>
   );
