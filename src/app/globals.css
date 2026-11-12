@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
+}
+
+body {
+  @apply bg-white text-slate-900 antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  @apply bg-navy-100 text-navy-900;
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+  .btn {
+    @apply inline-flex h-12 select-none items-center justify-center gap-2 rounded-xl px-5 text-[15px] font-semibold transition duration-150 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply btn bg-navy-900 text-white shadow-sm hover:bg-navy-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-navy-700/25;
+  }
+  .btn-secondary {
+    @apply btn border border-slate-300 bg-white text-navy-900 hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-navy-700/10;
+  }
+  .card {
+    @apply rounded-2xl border border-slate-200 bg-white shadow-soft;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-slate-700;
+  }
+  .input {
+    @apply block h-12 w-full rounded-xl border border-slate-300 bg-white px-3.5 text-base text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-navy-700 focus:ring-4 focus:ring-navy-700/10;
+  }
+  .input-error {
+    @apply border-red-400 focus:border-red-500 focus:ring-red-500/10;
+  }
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.14em] text-navy-500;
+  }
+  .pb-safe {
+    padding-bottom: calc(0.75rem + var(--safe-bottom));
+  }
+
+  /* Long-form guide & legal content */
+  .prose-guide {
+    @apply text-[16.5px] leading-[1.75] text-slate-700;
+  }
+  .prose-guide h2:not(:where(.not-prose, .not-prose *)) {
+    @apply mb-3 mt-12 scroll-mt-24 text-2xl font-semibold tracking-tight text-navy-950;
+  }
+  .prose-guide h3:not(:where(.not-prose, .not-prose *)) {
+    @apply mb-2 mt-8 text-lg font-semibold text-navy-900;
+  }
+  .prose-guide p:not(:where(.not-prose, .not-prose *)) {
+    @apply my-4;
+  }
+  .prose-guide :is(ul, ol):not(:where(.not-prose, .not-prose *)) {
+    @apply my-4 space-y-2 pl-5;
+  }
+  .prose-guide ul:not(:where(.not-prose, .not-prose *)) {
+    @apply list-disc marker:text-navy-300;
+  }
+  .prose-guide ol:not(:where(.not-prose, .not-prose *)) {
+    @apply list-decimal marker:font-semibold marker:text-navy-500;
+  }
+  .prose-guide a:not(:where(.not-prose, .not-prose *)) {
+    @apply font-medium text-navy-700 underline decoration-navy-200 underline-offset-4 hover:decoration-navy-700;
+  }
+  .prose-guide strong:not(:where(.not-prose, .not-prose *)) {
+    @apply font-semibold text-slate-900;
+  }
+}
+
+/* Keep the footer clear of the mobile bottom action bar. */
+@media (max-width: 1023px) {
+  body:has([data-action-bar]) > footer {
+    padding-bottom: calc(6.5rem + var(--safe-bottom));
+  }
+}
+
+/* Watermarked previews are not printable. */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
