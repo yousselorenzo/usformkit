@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { PurchaseTracker } from '@/components/PurchaseTracker';
 import { IconCheck, IconDownload, IconEye, IconMail, IconSpinner } from '@/components/Icons';
 import { downloadWindowDays } from '@/lib/fulfillment';
 import { PRODUCTS, isDocType } from '@/lib/products';
@@ -10,7 +11,16 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { title: 'Your document', robots: { index: false, follow: false } };
 
 type State =
-  | { kind: 'paid'; product: string; email: string | null; id: string; expired: boolean }
+  | {
+      kind: 'paid';
+      product: string;
+      docType: string;
+      email: string | null;
+      id: string;
+      expired: boolean;
+      amount: number;
+      currency: string;
+    }
   | { kind: 'pending'; id: string }
   | { kind: 'invalid' };
 
@@ -24,6 +34,9 @@ async function load(id: string | undefined): Promise<State> {
       kind: 'paid',
       id,
       product: isDocType(docType) ? PRODUCTS[docType].name : 'document',
+      docType: isDocType(docType) ? docType : 'document',
+      amount: (s.amount_total ?? 0) / 100,
+      currency: (s.currency ?? 'usd').toUpperCase(),
       email: s.customer_details?.email ?? null,
       expired: Date.now() / 1000 - s.created > downloadWindowDays() * 86400,
     };
@@ -39,6 +52,13 @@ export default async function SuccessPage({ searchParams }: { searchParams: { se
     <div className="container-x flex min-h-[70vh] max-w-xl flex-col justify-center py-12">
       {state.kind === 'paid' && !state.expired && (
         <div className="card p-6 text-center sm:p-10">
+          <PurchaseTracker
+            transactionId={state.id}
+            value={state.amount}
+            currency={state.currency}
+            itemId={state.docType}
+            itemName={state.product}
+          />
           <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-50/50">
             <IconCheck width={28} height={28} />
           </span>
