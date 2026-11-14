@@ -10,6 +10,8 @@ export type Product = {
   tagline: string;
   description: string;
   sensitive: boolean;
+  /** Stripe Payment Link the pay button opens. */
+  paymentLink: string;
 };
 
 export const PRODUCTS: Record<DocType, Product> = {
@@ -23,6 +25,7 @@ export const PRODUCTS: Record<DocType, Product> = {
     description:
       'Record the transfer of a car, truck, motorcycle, boat or any personal item between a buyer and a seller.',
     sensitive: false,
+    paymentLink: 'https://buy.stripe.com/7sYbJ1aWd1qzcN4b4O3AY07',
   },
   w9: {
     type: 'w9',
@@ -34,6 +37,7 @@ export const PRODUCTS: Record<DocType, Product> = {
     description:
       'Give clients a clean, completed W-9 with your TIN, tax classification and the IRS certification language.',
     sensitive: true,
+    paymentLink: 'https://buy.stripe.com/3cI3cvaWd1qzaEWa0K3AY08',
   },
   lease: {
     type: 'lease',
@@ -45,6 +49,7 @@ export const PRODUCTS: Record<DocType, Product> = {
     description:
       'A complete landlord-tenant lease covering rent, deposit, utilities, pets, entry and federal lead-based paint disclosure.',
     sensitive: false,
+    paymentLink: 'https://buy.stripe.com/fZudR9aWd4CL28q8WG3AY06',
   },
 };
 

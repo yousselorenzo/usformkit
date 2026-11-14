@@ -17,11 +17,11 @@ const FAQS = [
   },
   {
     q: 'What happens after I pay?',
-    a: 'You are redirected to a download page with your clean, unwatermarked PDF. A backup copy and a download link are also emailed to the address you enter at checkout.',
+    a: 'You are redirected to a download page with your clean, unwatermarked PDF. Stripe emails your receipt to the address you enter at checkout.',
   },
   {
     q: 'Is my information secure?',
-    a: 'Payments are handled by Stripe; we never see your card number. Your form answers are encrypted with AES-256 before checkout and are not stored in a database.',
+    a: 'Payments are handled by Stripe; we never see your card number. Your form answers stay in your browser until you pay and are not stored in a database.',
   },
   {
     q: 'Are these documents legally binding?',
@@ -55,7 +55,7 @@ export default function HomePage() {
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-slate-600">
               Fill in a Bill of Sale, W-9 or Lease Agreement and watch the document build itself in real time. Pay
-              once, download a clean PDF, and get a backup copy by email.
+              once, download a clean PDF, and get a Stripe receipt by email.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link href="#documents" className="btn-primary">
@@ -120,7 +120,7 @@ export default function HomePage() {
             {[
               ['Fill out the form', 'Answer guided questions on any device. Your progress is kept in this browser tab.'],
               ['Check the live preview', 'See exactly what your finished document will look like before you pay anything.'],
-              ['Pay & download', 'Secure Stripe checkout unlocks your clean PDF instantly, plus a backup copy by email.'],
+              ['Pay & download', 'Secure Stripe checkout unlocks your clean PDF instantly, plus a Stripe receipt by email.'],
             ].map(([title, text], i) => (
               <li key={title} className="card p-6">
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-navy-900 text-sm font-semibold text-white">
@@ -155,7 +155,7 @@ export default function HomePage() {
             {[
               [IconLock, 'Stripe-secured payments', 'Card details never touch our servers.'],
               [IconShield, 'AES-256 encryption', 'Form answers are encrypted before checkout.'],
-              [IconBolt, 'Instant delivery', 'Download immediately; backup copy emailed.'],
+              [IconBolt, 'Instant delivery', 'Download immediately after payment.'],
               [IconBook, 'Cited sources', 'Official government references for every form.'],
             ].map(([Icon, t, d]) => {
               const I = Icon as typeof IconLock;

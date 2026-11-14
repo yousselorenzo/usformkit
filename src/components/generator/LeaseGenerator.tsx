@@ -43,7 +43,7 @@ export function LeaseGenerator() {
   const doc = useMemo(() => buildLease(d), [d]);
 
   return (
-    <GeneratorShell docType="lease" doc={doc} data={d} validate={f.validate} setServerErrors={f.setErrors}>
+    <GeneratorShell docType="lease" doc={doc} data={d} validate={f.validate}>
       <FormSection title="Parties">
         <TextField {...f.text('landlordName')} className={full} label="Landlord / property owner" required />
         <TextField

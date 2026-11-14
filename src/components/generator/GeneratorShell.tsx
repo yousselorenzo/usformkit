@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useState, type MouseEvent, type ReactNode } from 'react';
 import type { DocModel } from '@/lib/documents/types';
+import { ORDER_KEY } from '@/lib/order';
 import { PRODUCTS, formatPrice, type DocType } from '@/lib/products';
-import { IconArrow, IconEye, IconLock, IconMail, IconPencil, IconShield, IconSpinner } from '../Icons';
+import { IconArrow, IconEye, IconLock, IconMail, IconPencil, IconShield } from '../Icons';
 import { DocumentPreview } from './DocumentPreview';
 
 type Props = {
@@ -12,25 +13,14 @@ type Props = {
   doc: DocModel;
   data: unknown;
   validate: () => boolean;
-  setServerErrors: (e: Record<string, string>) => void;
   children: ReactNode;
 };
 
-export function GeneratorShell({ docType, doc, data, validate, setServerErrors, children }: Props) {
+export function GeneratorShell({ docType, doc, data, validate, children }: Props) {
   const product = PRODUCTS[docType];
   const price = formatPrice(product.priceCents);
   const [tab, setTab] = useState<'form' | 'preview'>('form');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [canceled, setCanceled] = useState(false);
-
-  useEffect(() => {
-    setCanceled(new URLSearchParams(window.location.search).get('canceled') === '1');
-    // Reset the loading state if the user comes back via the browser back button (bfcache).
-    const onShow = (e: PageTransitionEvent) => e.persisted && setLoading(false);
-    window.addEventListener('pageshow', onShow);
-    return () => window.removeEventListener('pageshow', onShow);
-  }, []);
 
   const focusFirstError = () =>
     setTimeout(() => {
@@ -39,51 +29,37 @@ export function GeneratorShell({ docType, doc, data, validate, setServerErrors, 
       el?.querySelector<HTMLElement>('input,select,textarea,button')?.focus({ preventScroll: true });
     }, 60);
 
-  async function checkout() {
+  /**
+   * The pay button is a real link to the Stripe Payment Link. Before the browser follows it we
+   * validate the form and stash the answers in this tab's session storage so the success page
+   * can build the clean PDF after Stripe sends the customer back.
+   */
+  function beforePay(e: MouseEvent<HTMLAnchorElement>) {
     setError(null);
     if (!validate()) {
+      e.preventDefault();
       setTab('form');
       setError('Please complete the highlighted fields.');
       focusFirstError();
       return;
     }
-    setLoading(true);
     try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ docType, data }),
-      });
-      const json = (await res.json().catch(() => ({}))) as { url?: string; error?: string; fields?: Record<string, string> };
-      if (json.fields) {
-        setServerErrors(json.fields);
-        setTab('form');
-        focusFirstError();
-      }
-      if (!res.ok || !json.url) throw new Error(json.error || 'Unable to start checkout.');
-      window.location.assign(json.url);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Something went wrong. Please try again.');
-      setLoading(false);
+      sessionStorage.setItem(ORDER_KEY, JSON.stringify({ docType, data, savedAt: Date.now() }));
+    } catch {
+      /* storage unavailable: the customer can still pay; support can send the document */
     }
   }
 
   const PayButton = ({ className = '' }: { className?: string }) => (
-    <button type="button" onClick={checkout} disabled={loading} className={`btn-primary ${className}`}>
-      {loading ? <IconSpinner /> : <IconLock width={18} height={18} />}
-      {loading ? 'Opening secure checkout…' : `Pay ${price} & download`}
-    </button>
+    <a href={product.paymentLink} onClick={beforePay} rel="noopener noreferrer" className={`btn-primary ${className}`}>
+      <IconLock width={18} height={18} />
+      {`Pay ${price} & download`}
+    </a>
   );
 
   return (
     <>
       <div className="container-x pb-36 lg:pb-20">
-        {canceled && (
-          <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-            Checkout was cancelled — your answers are saved in this tab. You can pick up where you left off.
-          </div>
-        )}
-
         {/* Mobile tab switcher */}
         <div className="sticky top-16 z-30 -mx-4 border-b border-slate-200 bg-white/90 px-4 py-2.5 backdrop-blur-xl lg:hidden">
           <div role="tablist" className="grid grid-cols-2 gap-1 rounded-xl bg-slate-100 p-1">

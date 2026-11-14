@@ -32,11 +32,11 @@ export default function Page() {
 
       <h2>How your form answers are handled</h2>
       <p>
-        Before you are sent to checkout, your answers are encrypted on our server with AES-256-GCM. The encrypted text is
-        attached to your Stripe checkout session so we can generate your PDF after payment without keeping a separate
-        database of documents. Stripe stores only this ciphertext; it cannot read your answers. While you fill out a
-        form, a draft is kept in your browser&apos;s session storage (cleared when you close the tab); W-9 tax
-        identification numbers are never saved there.
+        Your answers are not sent to Stripe and are not kept in a database. While you fill out a form, a draft is kept in
+        your browser&apos;s session storage (cleared when you close the tab); W-9 tax identification numbers are not
+        saved in that draft. When you click Pay, your answers are held in your browser&apos;s session storage for that tab
+        only, so we can generate your PDF when Stripe returns you to our site. Your answers are sent to our server
+        briefly to produce the PDF and are not stored.
       </p>
 
       <h2>How we use information</h2>
@@ -64,8 +64,7 @@ export default function Page() {
 
       <h2>Retention</h2>
       <p>
-        Download links remain active for a limited period after purchase. Payment records, including the encrypted
-        document payload attached to your order, are retained by Stripe as required for accounting, tax and dispute
+        Payment records are retained by Stripe as required for accounting, tax and dispute
         purposes. You may ask us to delete your information at any time, subject to legal retention requirements.
       </p>
 

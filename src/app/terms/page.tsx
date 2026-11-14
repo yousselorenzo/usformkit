@@ -34,7 +34,7 @@ export default function Page() {
       <h2>3. Purchases and pricing</h2>
       <p>
         Prices are shown in US dollars before checkout and are charged once per document. Payments are processed by
-        Stripe. After successful payment you receive a PDF download link and a copy by email. Refunds are governed by
+        Stripe. After successful payment you can download your PDF from the confirmation page and Stripe emails you a receipt. Refunds are governed by
         our <Link href="/refund-policy">Refund Policy</Link>.
       </p>
 

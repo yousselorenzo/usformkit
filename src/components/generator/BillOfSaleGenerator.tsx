@@ -41,7 +41,7 @@ export function BillOfSaleGenerator() {
   const vehicle = d.itemType === 'vehicle';
 
   return (
-    <GeneratorShell docType="bill-of-sale" doc={doc} data={d} validate={f.validate} setServerErrors={f.setErrors}>
+    <GeneratorShell docType="bill-of-sale" doc={doc} data={d} validate={f.validate}>
       <FormSection title="What are you selling?">
         <Segmented
           className={full}

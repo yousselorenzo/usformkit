@@ -41,7 +41,7 @@ export function W9Generator() {
   const passThrough = ['partnership', 'trust', 'llc'].includes(d.taxClass);
 
   return (
-    <GeneratorShell docType="w9" doc={doc} data={d} validate={f.validate} setServerErrors={f.setErrors}>
+    <GeneratorShell docType="w9" doc={doc} data={d} validate={f.validate}>
       <FormSection title="Who is filling this out?" description="Lines 1–2 of Form W-9.">
         <TextField
           {...f.text('name')}
